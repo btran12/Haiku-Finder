@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class HaikuFinder {
 
 	public static void main(String[] args){
-		final String fileLocation = "Samuel.txt";
+		final String fileLocation = "FILE HERE";//Put file's location here
 
 		System.out.println(findHaiku(fileLocation));
 	}
