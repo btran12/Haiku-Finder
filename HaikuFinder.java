@@ -36,35 +36,31 @@ public class HaikuFinder {
 					haiku += "\n";	//New line to separate units
 					
 					//Change the unit to look for
-					if (unit == 5){	//7
-						unit += 7;
-						
-					}else if (unit == 12){	//5
-						unit += 5;
-					}else if (unit == 17){	//Back to 5
-						unit = 5;
-						allHaikus += haiku + "-------------\n";
+					if (unit == 5){	
+						unit += 7;	//Now look for lines with 7 syllables (12 sylCount)
+					}else if (unit == 12){
+						unit += 5;	//Now look for lines with 5 syllables (17 sylCount)
+					}else if (unit == 17){	
+						unit = 5;	//Back to 5
+						allHaikus += haiku + "-------------\n";	//Separator for each Haiku
 						
 						//Reset
 						haiku = "";
 						sylCount = 0;
 					}
-				}else if (sylCount > unit){	//If the syllable count don't match up with the units 575
+					
+				}else if (sylCount > unit){	//If the syllable count don't matches up with the units 575
 					//Reset
 					haiku = "";
 					sylCount = 0;
 				}
 			}
-			
-			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("<!>ERROR<!> File not found!");
 		}
-		
 		return allHaikus;
 	}
 	
-	//REFINE LOOKING FOR VOWELS WITH 'e'
 	public static int countSyllable(String word){
 		//Look for patterns within words
 		int vowelsCount = 0;
@@ -72,7 +68,6 @@ public class HaikuFinder {
 		word = word.toLowerCase();	//Convert to lower case
 		char[] strArray = word.toCharArray();
 		char lastChar = 0;
-		
 		for(char c : strArray){
 			
 			if (c == 'u' || c == 'e' || c == 'o' || c == 'a'|| c == 'i' || c == 'y'){   //Count the number of vowels + y
@@ -86,11 +81,13 @@ public class HaikuFinder {
 			}
 			lastChar = c;
 		}
-
-		//After the check and a vowel has not been accounted for.
-		if (vowelsCount > 0 && lastChar != 'e'){
-			sylCount++;
-		}
+		
+		//Silent 'e'
+		//Problem with count when the last char is not a silent 'e'
+		//For Instance, goodbye will return 1 which is wrong and name will return 1 which is correct.
+		if (vowelsCount > 0 && lastChar != 'e') sylCount++;
+		if (sylCount == 0) sylCount++;	//If syllable count is 0 increase by 1.
+		
 		return sylCount;
 	}
 }
