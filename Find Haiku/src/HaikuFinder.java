@@ -6,9 +6,9 @@ import java.util.Scanner;
 public class HaikuFinder {
 
 	public static void main(String[] args){
-		final String fileLocation = "Samuel.txt";
+		final String FILE_LOCATION = "Samuel.txt";
 
-		System.out.println(findHaiku(fileLocation));
+		System.out.println(findHaiku(FILE_LOCATION));
 	}
 
 	//Read in each word from the text file's location
