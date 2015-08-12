@@ -43,108 +43,114 @@
 
 <script>
 
-	function findHaiku(){
-		var text = document.getElementById("textarea").value;
-		
-		var line = "";
-		var verse = "";
-		var haiku = "";
-		var syllableCount = 0;
-		var lineCount = 5;
-		var newHaiku = false;
-		//Remove line breaks; then remove multiple spaces with a single space.
-		text = (text.replace(/(\r\n|\n|\r)/gm, ' ')).replace(/  +/g, ' ');
-		
-		var separatedText = text.split(" ");
-		
-		for(i = 0; i < separatedText.length; i++){
-			//Format the text to not contain any non-alphabet/numeric values
-			separatedText[i] = separatedText[i].replace(/[^a-zA-Z0-9-]/g, '');
+	function findHaiku() {
+	    var text = document.getElementById("textarea").value;
 
-			//Get the word syllable
-			syllableCount += getSyllableCount(separatedText[i]);
-			
-			verse += separatedText[i] + "[" + getSyllableCount(separatedText[i]) +"]" + " ";
-			
-			//console.log(separatedText[i] + "[" + getSyllableCount(separatedText[i]) +"]");
-			//console.log("Count " + syllableCount);
-			//Change 5 to a variable
-			if (syllableCount == lineCount){
-				
-				verse += "\n";	//New line to separate each verse
-				printHaiku(verse);
-				verse = "";
-				
-				  //Change the lineCount to look for
-				  if (lineCount == 5){	
-				  		if (newHaiku){
-							lineCount = 5;	
-							newHaiku = false;
-							printHaiku("-");
-						}else{
-							lineCount = 7;
-						}
-					  	//Now look for lines with 7 syllables (12 sylCount)
-				  }else if (lineCount == 7){
-					  lineCount = 5;	//Now look for lines with 5 syllables (17 sylCount)
-					  newHaiku = true;
-				  }
-				  syllableCount = 0;
-			}else if (syllableCount > lineCount){
-				//Reset
-				verse = "";
-				syllableCount = 0;
-			}
-			//console.log(separatedText[i] + " : " + syllableCount );	
-		}
+	    var line = "";
+	    var verse = "";
+	    var haiku = "";
+	    var syllableCount = 0;
+	    var lineCount = 5;
+	    var newHaiku = false;
+	    //Remove line breaks; then remove multiple spaces with a single space.
+	    text = (text.replace(/(\r\n|\n|\r)/gm, ' ')).replace(/  +/g, ' ');
+
+	    var separatedText = text.split(" ");
+
+	    for (i = 0; i < separatedText.length; i++) {
+	        //Format the text to not contain any non-alphabet/numeric values
+	        separatedText[i] = separatedText[i].replace(/[^a-zA-Z0-9-]/g, '');
+
+	        //Get the word syllable
+	        syllableCount += getSyllableCount(separatedText[i]);
+
+	        verse += separatedText[i] + "[" + getSyllableCount(separatedText[i]) + "]" + " ";
+
+	        //console.log(separatedText[i] + "[" + getSyllableCount(separatedText[i]) +"]");
+	        //console.log("Count " + syllableCount);
+	        //Change 5 to a variable
+	        if (syllableCount == lineCount) {
+
+	            verse += "\n"; //New line to separate each verse
+	            printHaiku(verse);
+	            verse = "";
+
+	            //Change the lineCount to look for
+	            if (lineCount == 5) {
+	                if (newHaiku) {
+	                    lineCount = 5;
+	                    newHaiku = false;
+	                    printHaiku("-");
+	                } else {
+	                    lineCount = 7;
+	                }
+	                //Now look for lines with 7 syllables (12 sylCount)
+	            } else if (lineCount == 7) {
+	                lineCount = 5; //Now look for lines with 5 syllables (17 sylCount)
+	                newHaiku = true;
+	            }
+	            syllableCount = 0;
+	        } else if (syllableCount > lineCount) {
+	            //Reset
+	            verse = "";
+	            syllableCount = 0;
+	        }
+	        //console.log(separatedText[i] + " : " + syllableCount );	
+	    }
 	}
-	
+
 	function printHaiku(haiku) {
-		var node = document.createElement("li");
-		var textnode = document.createTextNode(haiku);
-		node.appendChild(textnode);
-		document.getElementById("haiku_list").appendChild(node);
+	    var node = document.createElement("li");
+	    var textnode = document.createTextNode(haiku);
+	    node.appendChild(textnode);
+	    document.getElementById("haiku_list").appendChild(node);
 	}
-	
-	function getSyllableCount(word){
-		var vowelCount = 0;
-		var diph = 0;
-		var triph = 0;
-		
-		for (a = 0; a < word.length; a++){
-				
-			var c = word.charAt(a).toLowerCase();
-			//If the vowels are an index of c 
-			if (['u','e','o','a','i','y'].indexOf(c) != -1){
-				vowelCount++;
-				
-				//If the current letter is e
-				//And the letter before(diph) and after is not a vowel
-				if (a+1 < word.length){
-					if (c == 'e' && diph == 0 && (['u','e','o','a','i','y'].indexOf(word.charAt(a+1).toLowerCase()) == -1)){
-						vowelCount--;
-					}
-				}
-				diph++;
-				triph++;
-				
-				//Count diphthong, triphthong as 1 vowel
-				if (diph > 1){
-					diph = 0;
-					vowelCount--;
-				}
-			}else{
-				diph = 0;	
-				triph = 0;
-			}
-		}
-		
-		//Word ending with 'le'
-		if (word.charAt(word.length - 2) == 'l' && word.charAt(word.length - 1) == 'e') {vowelCount++;}
-		if (word.charAt(word.length - 1) == 'e' && vowelCount > 1){ vowelCount--; }
-		//If the algorithm happens to return 0
-		if (vowelCount == 0) { vowelCount = 1; }
-		return vowelCount; 
+
+	function getSyllableCount(word) {
+	    var vowelCount = 0;
+	    var diph = 0;
+	    var triph = 0;
+
+	    for (a = 0; a < word.length; a++) {
+
+	        var c = word.charAt(a).toLowerCase();
+	        //If the vowels are an index of c 
+	        if (['u', 'e', 'o', 'a', 'i', 'y'].indexOf(c) != -1) {
+	            vowelCount++;
+
+	            //If the current letter is e
+	            //And the letter before(diph) and after is not a vowel
+	            if (a + 1 < word.length) {
+	                if (c == 'e' && diph == 0 && (['u', 'e', 'o', 'a', 'i', 'y'].indexOf(word.charAt(a + 1).toLowerCase()) == -1)) {
+	                    vowelCount--;
+	                }
+	            }
+	            diph++;
+	            triph++;
+
+	            //Count diphthong, triphthong as 1 vowel
+	            if (diph > 1) {
+	                diph = 0;
+	                vowelCount--;
+	            }
+	        } else {
+	            diph = 0;
+	            triph = 0;
+	        }
+	    }
+
+	    //Word ending with 'le'
+	    if (word.charAt(word.length - 2) == 'l' && word.charAt(word.length - 1) == 'e') {
+	        vowelCount++;
+	    }
+	    if (word.charAt(word.length - 1) == 'e' && vowelCount > 1) {
+	        vowelCount--;
+	    }
+	    //If the algorithm happens to return 0
+	    if (vowelCount == 0) {
+	        vowelCount = 1;
+	    }
+	    return vowelCount;
 	}
 	
 </script>
